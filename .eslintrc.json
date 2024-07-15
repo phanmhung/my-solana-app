@@ -1,3 +1,114 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next", "prettier", "next/core-web-vitals"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {}
+    },
+    "boundaries/elements": [
+      {
+        "type": "app",
+        "pattern": "@/app/*"
+      },
+      {
+        "type": "widgets",
+        "pattern": "@/widgets/*"
+      },
+      {
+        "type": "features",
+        "pattern": "@/features/*"
+      },
+      {
+        "type": "entities",
+        "pattern": "@/entities/*"
+      },
+      {
+        "type": "shared",
+        "pattern": "@/shared/*"
+      }
+    ],
+    "boundaries/ignore": ["**/*.test.*"]
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off",
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": {
+          "caseInsensitive": true
+        },
+        "newlines-between": "never",
+        "pathGroups": [
+          {
+            "group": "internal",
+            "position": "after",
+            "pattern": "@/processes/**"
+          },
+          {
+            "group": "internal",
+            "position": "after",
+            "pattern": "@/widgets/**"
+          },
+          {
+            "group": "internal",
+            "position": "after",
+            "pattern": "@/features/**"
+          },
+          {
+            "group": "internal",
+            "position": "after",
+            "pattern": "@/entities/**"
+          },
+          {
+            "group": "internal",
+            "position": "after",
+            "pattern": "@/shared/**"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin", "react"],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"]
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/app/*/**"]
+          },
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/processes/*/**"]
+          },
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/widgets/*/**"]
+          },
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/features/*/**"]
+          },
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/entities/*/**"]
+          },
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/shared/ui/*/**"]
+          },
+          {
+            "message": "Private imports are prohibited, use public imports instead",
+            "group": ["@/shared/api/**"]
+          }
+        ]
+      }
+    ],
+    "import/default": "off"
+  }
 }
