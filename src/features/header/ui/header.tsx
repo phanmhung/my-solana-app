@@ -1,6 +1,7 @@
 import cls from './header.module.scss';
 import { useWalletDispatch, useWalletSelector } from '@/entities/wallet/lib/hooks';
 import { createWallet, walletBalance } from '@/entities/wallet';
+import { Button } from '@/shared/ui/button';
 // get static props
 
 export const Header = () => {
@@ -11,10 +12,10 @@ export const Header = () => {
   };
   return (
     <header className={cls.header}>
-      <button className="header_button" onClick={handleCreateWallet}>
-        Создать кошелёк
-      </button>
-      <p>Баланс: {balance} SOL</p>
+      <Button id="header_button" onClick={handleCreateWallet}>
+        Create wallet
+      </Button>
+      <p>Balance: {balance} SOL</p>
     </header>
   );
 };

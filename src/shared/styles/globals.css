@@ -1,0 +1,40 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 18px;
+  background-color: rgb(23, 23, 29);
+  color: #ffffff;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Inter, sans-serif;
+  box-sizing: border-box;
+}
+
+a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}

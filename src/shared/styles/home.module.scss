@@ -1,3 +1,49 @@
 .container {
     padding: 20px;
 }
+.main_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: rgb(23, 23, 29);
+}
+
+.wallet_info {
+    // grid 2 cloumns
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    width: 100%;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    &_address {
+        &_label {
+            margin-right: 10px;
+        }
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        // text overflow
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+    }
+    &_private {
+        display: flex;
+        align-items: center;
+        &_label {
+            margin-right: 10px;
+        }
+        width: 100%;
+        overflow: scroll;
+    }
+    
+}
+
+.copy_button{
+    width: 14px;
+    height: auto;
+}
