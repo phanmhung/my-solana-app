@@ -38,3 +38,49 @@ button {
   cursor: pointer;
   outline: inherit;
 }
+
+ul {
+  list-style: none;
+}
+a{
+  color: white;
+}
+input{
+  outline: none;
+  box-sizing: border-box;
+  background-color: transparent;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  color: white;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2); 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3); 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3); 
+}

@@ -1,55 +1,58 @@
-import React, { useState } from 'react';
-import { Connection, PublicKey, LAMPORTS_PER_SOL, clusterApiUrl, Transaction, SystemProgram, sendAndConfirmTransaction, Keypair } from '@solana/web3.js';
+import React, { FormEvent, useState } from 'react';
 import cls from '@/shared/styles/transactions.module.scss';
-import { useWalletSelector } from '@/entities/wallet/lib/hooks';
+import {
+  useWalletDispatch,
+  useWalletSelector,
+} from '@/entities/wallet/lib/hooks';
+import { Header } from '@/features/header';
+import { Button } from '@/shared/ui/button';
+import { sendSol } from '@/entities/wallet';
 
-const Transactions = () => {
-  const [amount, setAmount] = useState('');
-  const [recipient, setRecipient] = useState('');
-  const balance = useWalletSelector((state) => state.balance);
+export default function Transactions() {
   const wallet = useWalletSelector((state) => state.wallet);
+  const [amount, setAmount] = useState('');
+  const [toPublicKey, setToPublicKey] = useState('');
+  const dispatch = useWalletDispatch();
 
-  const handleTransaction = async () => {
-    if (!wallet) return;
+  const validateAmount = (amount: string): boolean => {
+    const parsedAmount = parseFloat(amount);
+    return !isNaN(parsedAmount) && parsedAmount > 0;
+  };
 
-    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: new PublicKey(wallet.publicKey),
-        toPubkey: new PublicKey(recipient),
-        lamports: parseFloat(amount) * LAMPORTS_PER_SOL,
-      })
-    );
+  const handleTransaction = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!validateAmount(amount)) {
+      // Consider using a modal or custom notification for a better user experience
+      alert('Please enter a valid amount');
+      return;
+    }
 
-    const signature = await sendAndConfirmTransaction(connection, transaction, [Keypair.fromSecretKey(wallet.secretKey)]);
-    console.log(`Transaction confirmed with signature: ${signature}`);
+    dispatch(sendSol(toPublicKey, parseFloat(amount)));
   };
 
   return (
     <div className={cls.container}>
-      <header className={cls.header}>
-        <button className={cls.button} onClick={() => window.history.back()}>Назад</button>
-        <p>Баланс: {balance} SOL</p>
-      </header>
+      <Header />
       <main>
+        <label>To Public Key:</label>
         <input
           type="text"
-          placeholder="Количество SOL"
+          value={toPublicKey}
+          onChange={(e) => setToPublicKey(e.target.value)}
+          placeholder="Recipient's Public Key"
+          className={cls.input}
+        />
+        <label>Amount (SOL):</label>
+        <input
+          type="text"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          placeholder="Amount"
           className={cls.input}
         />
-        <input
-          type="text"
-          placeholder="Адрес кошелька получателя"
-          value={recipient}
-          onChange={(e) => setRecipient(e.target.value)}
-          className={cls.input}
-        />
-        <button onClick={handleTransaction}>Отправить</button>
+        <Button onClick={handleTransaction}>Send</Button>
       </main>
     </div>
   );
 };
 
-export default Transactions;
