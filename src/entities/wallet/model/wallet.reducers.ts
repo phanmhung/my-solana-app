@@ -15,6 +15,11 @@ const walletReducer = (state = initialState, action: WalletActionTypes): WalletS
   switch (action.type) {
     case CREATE_WALLET:
       const keypair = Keypair.generate();
+      // Save the wallet to local storage
+      localStorage.setItem('solanaWallet', JSON.stringify({
+        publicKey: keypair.publicKey.toBase58(),
+        secretKey: Buffer.from(keypair.secretKey).toString('base64'),
+      }));
       return {
         ...state,
         wallet: {

@@ -25,11 +25,6 @@ export default function Home() {
     dispatch(requestAirdrop());
   };
 
-  // load wallet from local storage
-  React.useEffect(() => {
-    dispatch({ type: 'LOAD_WALLET' });
-  }, [dispatch]);
-
   return (
     <div>
       <Header />
