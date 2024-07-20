@@ -91,7 +91,7 @@ The project structure is organized using a feature-based approach, as follows:
 
 For questions or feedback, please contact:
 
-- **Your Name**: [hungfan2000@example.com](mailto:hungfan2000l@gmail.com)
+- **Your Name**: [hungfan2000@gmail.com](mailto:hungfan2000@gmail.com)
 - **GitHub**: [@phanmhung](https://github.com/phanmhung)
 
 ---
