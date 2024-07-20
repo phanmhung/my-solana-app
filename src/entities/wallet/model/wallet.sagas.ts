@@ -1,10 +1,11 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
 import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, clusterApiUrl } from '@solana/web3.js';
-import { setBalance } from './wallet.actions';
-import { CREATE_WALLET, REQUEST_AIRDROP, SEND_SOL, SendSolAction, WalletActionTypes } from './wallet.types';
+import { setBalance, setWallet } from './wallet.actions';
+import { CREATE_WALLET, LOAD_WALLET, REQUEST_AIRDROP, SEND_SOL, SendSolAction, WalletActionTypes } from './wallet.types';
+import connection from '../lib/connection';
 
 function* createWalletSaga(): Generator<any, void, any> {
-  const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
   const wallet = yield select((state: any) => state.wallet.wallet);
   if (wallet) {
     const walletBalance = yield call([connection, connection.getBalance], new PublicKey(wallet.publicKey));
@@ -14,7 +15,7 @@ function* createWalletSaga(): Generator<any, void, any> {
 
 // Generator function to fetch balance
 function* fetchBalanceSaga(publicKeyString: string): Generator<any, void, any> {
-  const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
   const publicKey = new PublicKey(publicKeyString);
   const walletBalance = yield call([connection, connection.getBalance], publicKey);
   yield put(setBalance(walletBalance / 1e9)); // Convert lamports to SOL
@@ -29,7 +30,7 @@ function* sendSolSaga(action: SendSolAction): Generator<any, void, any> {
     return;
   }
   
-  const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
   const fromKeypair = Keypair.fromSecretKey(new Uint8Array(Buffer.from(wallet.secretKey, 'base64')));
   const transaction = new Transaction().add(
     SystemProgram.transfer({
@@ -68,7 +69,7 @@ function* sendSolSaga(action: SendSolAction): Generator<any, void, any> {
 }
 
 function* requestAirdropSaga(): Generator<any, void, any> {
-  const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
 
   try {
     // Retrieve the current state of the wallet
@@ -95,10 +96,23 @@ function* requestAirdropSaga(): Generator<any, void, any> {
   }
 }
 
+function* loadWalletSaga(): Generator<any, void, any> {
+  const walletDataString = localStorage.getItem('solanaWallet');
+
+  const walletData = walletDataString ? JSON.parse(walletDataString) : null;
+
+  if (walletData.publicKey && walletData.secretKey) {
+    yield put(setWallet(walletData.publicKey, walletData.secretKey)); 
+  } else {
+    console.error('No wallet data found in local storage');
+  }
+}
+
 function* walletSaga() {
   yield takeEvery<WalletActionTypes>(CREATE_WALLET, createWalletSaga);
   yield takeEvery(SEND_SOL, sendSolSaga);
-  yield takeEvery(REQUEST_AIRDROP, requestAirdropSaga);
+  yield takeEvery<WalletActionTypes>(REQUEST_AIRDROP, requestAirdropSaga);
+  yield takeEvery(LOAD_WALLET, loadWalletSaga);
 }
 
 export default walletSaga;

@@ -1,5 +1,5 @@
 import { Keypair } from '@solana/web3.js';
-import { WalletActionTypes, CREATE_WALLET, SET_BALANCE } from './wallet.types';
+import { WalletActionTypes, CREATE_WALLET, SET_BALANCE, SET_WALLET } from './wallet.types';
 
 interface WalletState {
   wallet: { publicKey: string; secretKey: string } | null;
@@ -22,6 +22,11 @@ const walletReducer = (state = initialState, action: WalletActionTypes): WalletS
           // Convert Uint8Array to a base64 string
           secretKey: Buffer.from(keypair.secretKey).toString('base64'),
         },
+      };
+    case SET_WALLET:
+      return {
+        ...state,
+        wallet: action.payload
       };
     case SET_BALANCE:
       return {
