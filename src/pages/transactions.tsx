@@ -31,9 +31,9 @@ export default function Transactions() {
   };
 
   return (
-    <div className={cls.container}>
+    <>
       <Header />
-      <main>
+      <main className={cls.container}>
         <label>To Public Key:</label>
         <input
           type="text"
@@ -52,7 +52,7 @@ export default function Transactions() {
         />
         <Button onClick={handleTransaction}>Send</Button>
       </main>
-    </div>
+    </>
   );
 };
 

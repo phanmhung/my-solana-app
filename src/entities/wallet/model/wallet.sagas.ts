@@ -1,8 +1,7 @@
 import { call, put, takeEvery, select } from 'redux-saga/effects';
-import { Connection, Keypair, PublicKey, SystemProgram, Transaction, clusterApiUrl } from '@solana/web3.js';
+import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction, clusterApiUrl } from '@solana/web3.js';
 import { setBalance } from './wallet.actions';
-import { CREATE_WALLET, SEND_SOL, SendSolAction, WalletActionTypes } from './wallet.types';
-import { walletState } from './wallet.store';
+import { CREATE_WALLET, REQUEST_AIRDROP, SEND_SOL, SendSolAction, WalletActionTypes } from './wallet.types';
 
 function* createWalletSaga(): Generator<any, void, any> {
   const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
@@ -23,14 +22,13 @@ function* fetchBalanceSaga(publicKeyString: string): Generator<any, void, any> {
 
 function* sendSolSaga(action: SendSolAction): Generator<any, void, any> {
   const { toPublicKey, amount } = action.payload;
-  const state: walletState = yield select((state: any) => state.wallet);
-  const { wallet } = state;
+  const wallet = yield select((state) => state.wallet);
 
-  if (!wallet) {
+  if (wallet === null) {
     console.error('Wallet is not defined');
     return;
   }
-
+  
   const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
   const fromKeypair = Keypair.fromSecretKey(new Uint8Array(Buffer.from(wallet.secretKey, 'base64')));
   const transaction = new Transaction().add(
@@ -63,13 +61,44 @@ function* sendSolSaga(action: SendSolAction): Generator<any, void, any> {
     // Update balance after transaction
     yield call(fetchBalanceSaga, fromKeypair.publicKey.toBase58());
   } catch (error) {
+    alert('Transaction failed. Please check the console for more details.'
+    );
     console.error('Transaction failed', error);
+  }
+}
+
+function* requestAirdropSaga(): Generator<any, void, any> {
+  const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+  try {
+    // Retrieve the current state of the wallet
+    const state= yield select((state: any) => state.wallet);
+
+    // Use the provided public key string or get it from the state
+    const pubKeyString = state.publicKey;
+
+    if (!pubKeyString) {
+      throw new Error('Public key is undefined');
+    }
+
+    // Validate that the public key string is not undefined and convert it to a PublicKey
+    const publicKey = new PublicKey(pubKeyString);
+
+    const signature = yield call([connection, connection.requestAirdrop], publicKey, 2 * LAMPORTS_PER_SOL); // Request 2 SOL
+    yield call([connection, connection.confirmTransaction], signature, 'confirmed');
+    console.log('Airdrop successful with signature:', signature);
+
+    // Update balance after airdrop
+    yield call(fetchBalanceSaga, publicKey.toBase58());
+  } catch (error) {
+    console.error('Airdrop failed:', error);
   }
 }
 
 function* walletSaga() {
   yield takeEvery<WalletActionTypes>(CREATE_WALLET, createWalletSaga);
   yield takeEvery(SEND_SOL, sendSolSaga);
+  yield takeEvery(REQUEST_AIRDROP, requestAirdropSaga);
 }
 
 export default walletSaga;
