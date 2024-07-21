@@ -22,7 +22,6 @@ export default function Transactions() {
   const handleTransaction = async (e: FormEvent) => {
     e.preventDefault();
     if (!validateAmount(amount)) {
-      // Consider using a modal or custom notification for a better user experience
       alert('Please enter a valid amount');
       return;
     }

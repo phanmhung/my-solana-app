@@ -56,7 +56,7 @@ function* sendSolSaga(action: SendSolAction): Generator<any, void, any> {
   );
 
   try {
-    // Create a recent blockhash
+    // Create a recent blockhash to include in the transaction
     const { blockhash } = yield call([connection, 'getRecentBlockhash']);
     transaction.recentBlockhash = blockhash;
     transaction.feePayer = fromKeypair.publicKey;
@@ -64,7 +64,7 @@ function* sendSolSaga(action: SendSolAction): Generator<any, void, any> {
     // Sign the transaction
     transaction.sign(fromKeypair);
 
-    // Send the transaction
+    // Send the transaction with the signature
     const signature = yield call([connection, connection.sendRawTransaction], transaction.serialize(), {
       skipPreflight: false,
       preflightCommitment: 'confirmed',
@@ -85,7 +85,6 @@ function* requestAirdropSaga(): Generator<any, void, any> {
 
 
   try {
-    // Retrieve the current state of the wallet
     const state = yield select((state: any) => state.wallet);
 
     // Use the provided public key string or get it from the state
@@ -117,8 +116,6 @@ function* loadWalletSaga(): Generator<any, void, any> {
     const walletBalance = yield call([connection, connection.getBalance], new PublicKey(walletData.publicKey));
     yield put(setBalance(walletBalance / LAMPORTS_PER_SOL));
     yield call(subscribeToAccountChangesSaga);
-  } else {
-    // console.error('No wallet data found in local storage');
   }
 }
 

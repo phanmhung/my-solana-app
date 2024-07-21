@@ -12,7 +12,6 @@
 }
 
 .wallet_info {
-    // grid 2 cloumns
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
@@ -26,7 +25,6 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        // text overflow
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
