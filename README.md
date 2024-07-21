@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Solana Wallet Web Application
+
+This project is a web application for creating and managing a Solana wallet, built using Next.js, TypeScript, Redux-Saga, Solana Web3.js, and SCSS for styling. It allows users to create wallets, view their balance, send SOL tokens, and handle transactions on the Solana Devnet.
+
+## Features
+
+- **Create Wallet**: Generate a new Solana wallet with a public and secret key.
+- **View Balance**: Display the current balance of the wallet in SOL.
+- **Send SOL**: Transfer SOL tokens to another wallet address.
+- **Real-time Updates**: Receive real-time updates for balance changes using WebSockets.
+- **Persistent Wallet State**: Store wallet information in local storage to maintain state across page reloads.
+
+## Technologies Used
+
+- **Next.js**: A React framework for server-side rendering and static site generation.
+- **TypeScript**: For static type checking and improved developer experience.
+- **Redux Toolkit**: Simplified setup of Redux with `createSlice` for state management.
+- **Redux-Saga**: Middleware to handle side effects in Redux.
+- **Solana Web3.js**: Library for interacting with the Solana blockchain.
+- **SCSS**: A CSS preprocessor for styling.
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+Ensure you have Node.js and Yarn installed on your development machine.
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/phanmhung/my-solana-app
+   cd solana-wallet-app
+   ```
+
+2. **Install the dependencies**:
+
+   ```bash
+   yarn install
+   ```
+
+### Running the Application
+
+To start the development server:
 
 ```bash
-npm run dev
-# or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+To build the application for production:
 
-## Learn More
+```bash
+yarn build
+```
 
-To learn more about Next.js, take a look at the following resources:
+To start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+yarn start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+The project structure is organized using a feature-based approach, as follows:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+.
+├── features      # Shared React components
+├── entities        # Feature-based structure for Redux slices
+│   └── wallet      # Wallet-related logic and state management
+├── pages           # Next.js pages
+├── public          # Static files
+├── shared          # Global utils and styles
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Key Files
+
+- **`_app.tsx`**: Custom app component to initialize Redux and dispatch wallet loading on app start.
+- **`entities/wallet`**: Contains wallet-related Redux slices, sagas, and types.
+- **`pages/index.tsx`**: Main page for creating a wallet and viewing balance.
+- **`pages/transactions.tsx`**: Page for sending SOL tokens.
+
+## Contact
+
+For questions or feedback, please contact:
+
+- **Your Name**: [hungfan2000@gmail.com](mailto:hungfan2000@gmail.com)
+- **GitHub**: [@phanmhung](https://github.com/phanmhung)
+
+---
+
+This README provides a comprehensive guide to understanding, installing, and running the Solana Wallet Web Application.
+```
+
+Feel free to copy and paste this directly into your README.md file, making sure to replace placeholders like `yourusername` and `your.email@example.com` with your actual information.
